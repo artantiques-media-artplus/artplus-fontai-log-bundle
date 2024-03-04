@@ -1,0 +1,48 @@
+{%- if logs[0] is defined %}
+
+<div class="card" id="log_list">
+  <div class="card-header small text-uppercase">
+    <a data-toggle="collapse" href="#collapse-log" aria-expanded="true">
+      <svg class="icon icon-caret-down">
+        <use xlink:href="#icon-caret-down"></use>
+      </svg>
+      {% trans %}Historie{% endtrans %}
+    </a>
+  </div>
+  <div class="collapse show" id="collapse-log">
+    <div class="dataTables_wrapper">
+      <div class="table-responsive">
+        <div class="dataTables_wrapper">
+          <table class="display nowrap table dataTable" role="grid">
+            <thead>
+              <tr role="row">
+                <th class="table-padding-left"></th>
+                <th>{% trans %}Čas{% endtrans %}</th>
+                <th>{% trans %}Uživatel{% endtrans %}</th>
+                <th>{% trans %}Popis{% endtrans %}</th>
+                <th class="table-padding-right"></th>
+              </tr>
+            </thead>
+            <tbody> 
+  
+  {%- for log in logs %}
+
+              <tr>
+                <td class="table-padding-left"></td>
+                <td>{{ log.getCreatedAt|date('j. n. Y H:i') }}</td>
+                <td>{{ log.getAdmin }}</td>
+                <td class="wrap">{% include '@Log/description.html.twig' %}</td>
+                <td class="table-padding-right"></td>
+              </tr>
+    
+  {%- endfor %}
+    
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- endif %}

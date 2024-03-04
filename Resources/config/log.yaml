@@ -1,0 +1,16 @@
+services:
+    _defaults:
+        public: false
+
+    Fontai\Bundle\LogBundle\Service\Log:
+
+    log.service:
+        alias: Fontai\Bundle\LogBundle\Service\Log
+        public: true
+
+    log.twig_extension:
+        class: Fontai\Bundle\LogBundle\Twig\LogExtension
+        arguments:
+            - '@log.service'
+        tags:
+            - { name: twig.extension }

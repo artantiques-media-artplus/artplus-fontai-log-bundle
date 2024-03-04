@@ -1,0 +1,22 @@
+{
+    "name": "fontai/log-bundle",
+    "type": "symfony-bundle",
+    "description": "Fontai LogBundle",
+    "authors": [
+        {
+            "name": "Lumír Toman",
+            "email": "toman@websource.cz"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.0",
+        "propel/propel-bundle": "~4.0@dev"
+    },
+    "autoload": {
+        "psr-4": { "Fontai\\Bundle\\LogBundle\\": "" },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "minimum-stability": "dev"
+}

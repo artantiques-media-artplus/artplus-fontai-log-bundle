@@ -1,0 +1,64 @@
+{%- if log.getDescription %}
+
+  {{ log.getDescription }}<br>
+
+{%- endif %}
+
+{%- if log.getCreated %}
+
+  {% trans %}Vytvořeno{% endtrans %}
+
+{%- elseif log.getArchived %}
+
+  {% trans %}Archivováno{% endtrans %}
+
+{%- else %}
+
+  {%- set dataArray = log.getDataArray %}
+
+  {%- if dataArray|length %}
+    {%- set booleanTranslations = [[true, 'Ano'|trans], [false, 'Ne'|trans]] %}
+
+    {% trans %}Změněno:{% endtrans %}<br>
+
+    {%- for column, values in dataArray %}
+      {%- set formChoices = form[column].getConfig.getOption('choices') %}
+
+      {%- set valueOld = values[0][1] is defined ? (values[0][1] is iterable ? (values[0][1][app.request.getLocale] is defined ? values[0][1][app.request.getLocale] : values[0][0]|map((value, key) => values[0][1][key]|default(value))) : values[0][1]) : values[0][0] %}
+      
+      {%- set valueNew = values[1][1] is defined ? (values[1][1] is iterable ? (values[1][1][app.request.getLocale] is defined ? values[1][1][app.request.getLocale] : values[1][0]|map((value, key) => values[1][1][key]|default(value))) : values[1][1]) : values[1][0] %}
+
+      {%- if valueOld.timezone is defined %}
+        {%- set valueOld = valueOld|date('j.n.Y, H:i:s', form[column].getConfig.getOption('view_timezone')|default('UTC')) %}
+      {%- elseif formChoices %}
+        {%- for key, value in formChoices|filter((value, key) => value == valueOld) %}
+          {%- set valueOld = key %}
+        {%- endfor %}
+      {%- else %}
+        {%- for translation in booleanTranslations %}
+          {%- if valueOld is same as(translation[0]) %}
+            {%- set valueOld = translation[1] %}
+          {%- endif %}
+        {%- endfor %}
+      {%- endif %}
+
+      {%- if valueNew.timezone is defined %}
+        {%- set valueNew = valueNew|date('j.n.Y, H:i:s', form[column].getConfig.getOption('view_timezone')|default('UTC')) %}
+      {%- elseif formChoices %}
+        {%- for key, value in formChoices|filter((value, key) => value == valueNew) %}
+          {%- set valueNew = key %}
+        {%- endfor %}
+      {%- else %}
+        {%- for translation in booleanTranslations %}
+          {%- if valueNew is same as(translation[0]) %}
+            {%- set valueNew = translation[1] %}
+          {%- endif %}
+        {%- endfor %}
+      {%- endif %}
+
+      <strong>{{ form[column].getConfig.getOption('label')|default(column)|trans }}{% if values %}</strong> {% trans %}z{% endtrans %} <em>"{%- if valueOld is iterable %}{{ valueOld|join(', ') }}{%- else %}{{ valueOld }}{%- endif %}"</em> {% trans %}na{% endtrans %} <em>"{%- if valueNew is iterable %}{{ valueNew|join(', ') }}{%- else %}{{ valueNew }}{%- endif %}"</em>{% endif %}<br>
+
+    {%- endfor %}
+  {%- endif %}
+
+{%- endif %}
