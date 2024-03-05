@@ -10,7 +10,7 @@
     ],
     "require": {
         "php": ">=7.1.0",
-        "propel/propel-bundle": "~4.0@dev"
+        "propel/propel-bundle": "dev-main"
     },
     "autoload": {
         "psr-4": { "Fontai\\Bundle\\LogBundle\\": "" },
